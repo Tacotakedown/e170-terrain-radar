@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+	"geo",
+	"geoc",
+	"map-server",
+	"render",
+	"render-debug",
+]
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+debug = true

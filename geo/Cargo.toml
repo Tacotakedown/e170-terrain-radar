@@ -1,0 +1,11 @@
+[package]
+name = "geo"
+authors = ["Synaptic Simulations"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hcomp = { git = "https://github.com/SparkyPotato/hcomp" }
+libwebp-sys = { version = "0.6.0", features = ["avx2", "neon", "sse41"] }
+memmap2 = "0.5.3"
+tracy = { package = "tracy_full", version = "1.2.0" }
