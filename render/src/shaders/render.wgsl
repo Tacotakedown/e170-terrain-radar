@@ -47,10 +47,15 @@ var<private> l19000: vec3<f32> = vec3<f32>(0.00, 0.00, 0.00);
 var<private> l21000: vec3<f32> = vec3<f32>(0.00, 0.00, 0.00);
 var<private> l33000: vec3<f32> = vec3<f32>(0.00, 0.00, 0.00);
 var<private> unknown_terrain: vec3<f32> = vec3<f32>(0.41, 0.15, 0.42);
-var<private> water: vec3<f32> = vec3<f32>(0.00,0.00,0.00);
-var<private> taws_med_yellow: vec3<f32> = vec3<f32>(0.60,0.56,0.04);
+var<private> water: vec3<f32> = vec3<f32>(0.49,0.65,0.73);
+var<private> taws_med_green: vec3<f32> = vec3<f32>(0.06,0.36,0.14);
+var<private> taws_green: vec3<f32> = vec3<f32>(0.19,0.64,0.30);
+var<private> taws_orange: vec3<f32> = vec3<f32>(0.76,0.53,0.10);
 var<private> taws_yellow: vec3<f32> = vec3<f32>(0.96, 0.98, 0.01);
 var<private> taws_red: vec3<f32> = vec3<f32>(0.96, 0.00, 0.00);
+var<private> rand_seed : vec2<f32>;
+
+
 
 fn degrees(radians: f32) -> f32 {
     return radians * 57.295779513082322865;
@@ -82,10 +87,14 @@ fn map_height(height: u32) -> vec3<f32> {
     if (feet - 2000 > i32(uniforms.altitude)) {
         return taws_red;
     }else if(feet - 1000 > i32(uniforms.altitude)) {
-        return taws_med_yellow;
+        return taws_orange;
     }else if (feet > i32(uniforms.altitude - 500.0)) {
         return taws_yellow;
-    } else if (feet < 500) {
+    } else if(feet + 1000 > i32(uniforms.altitude)) {
+        return taws_med_green;
+    }else if(feet + 2000 > i32(uniforms.altitude)) {
+        return taws_green;
+    }else if (feet < 500) {
         return l500;
     } else {
         switch (feet / 1000) {
@@ -184,6 +193,7 @@ fn main([[location(0)]] uv: vec2<f32>) -> [[location(0)]] vec4<f32> {
     let xh_lerp = mix(zh, wh, pixel_offset.x);
     let height = u32(mix(xl_lerp, xh_lerp, pixel_offset.y));
 
+
     let xw = f32((x.height >> 15u) & 1u);
     let yw = f32((y.height >> 15u) & 1u);
     let zw = f32((z.height >> 15u) & 1u);
@@ -201,7 +211,7 @@ fn main([[location(0)]] uv: vec2<f32>) -> [[location(0)]] vec4<f32> {
     if (is_water > 0.5) {
         ret = water;
     } else {
-        ret = map_height(height) * hillshade;
+        ret = map_height(height);
     }
     return vec4<f32>(pow(ret, vec3<f32>(2.2)), 1.0);
 }
